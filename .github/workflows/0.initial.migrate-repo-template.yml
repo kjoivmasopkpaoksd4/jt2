@@ -85,7 +85,7 @@ jobs:
         run: |
           # gradle files
           ## gradle.properties - initial version 
-          echo "version=0.0.2-SNAPSHOT" > gradle.properties
+          echo "version=0.0.3-SNAPSHOT" > gradle.properties
 
       - name: Commit files
         run: |
@@ -122,7 +122,7 @@ jobs:
           # GitHub actions
           ARTIFACT_NAME_NEW=$(grep -o '^rootProject.name.*' settings.gradle.kts | sed -e 's/rootProject.name.*"\(.*\)"/\1/')
           echo "resolved from settings.gradle.kts ARTIFACT_NAME_NEW: $ARTIFACT_NAME_NEW"
-          sed -i "s/$ARTIFACT_NAME_OLD/$ARTIFACT_NAME_NEW/g" .github/workflows/callable.publish-javadoc.yml
+          #sed -i "s/$ARTIFACT_NAME_OLD/$ARTIFACT_NAME_NEW/g" .github/workflows/callable.publish-javadoc.yml
           
           # Remove this very GitHub Actions workflow yml
           rm .github/workflows/0.initial.migrate-repo-template.yml
