@@ -85,57 +85,7 @@ jobs:
         run: |
           # gradle files
           ## gradle.properties - initial version 
-          echo "version=0.0.1-SNAPSHOT" > gradle.properties
-          
-          ## build.gradle.kts
-          sed -i "s/group = \"$ARTIFACT_GROUP_OLD\"/group = \"$ARTIFACT_GROUP_NEW\"/g" build.gradle.kts
-          
-          ## settings.gradle.kts
-          sed -i "s/$ARTIFACT_NAME_OLD/$ARTIFACT_NAME_NEW/g" settings.gradle.kts
-          
-          ## java-library-template/build.gradle.kts
-          sed -i "s@group = \"$ARTIFACT_GROUP_OLD\"@group = \"$ARTIFACT_GROUP_NEW\"@g" java-library-template/build.gradle.kts
-          sed -i "s@githubRepo = \"$GITHUB_REPOSITORY_OLD\"@githubRepo = \"$GITHUB_REPOSITORY\"@g" java-library-template/build.gradle.kts
-          sed -i "s@developerId = \"hartmut-co-uk\"@developerId = \"$GITHUB_ACTOR\"@g" java-library-template/build.gradle.kts
-          sed -i "s@developerName = \"Hartmut Armbruster\"@developerName = \"Your Name\"@g" java-library-template/build.gradle.kts
-          sed -i "s@developerOrganization = \"thriving.dev\"@developerOrganization = \"ACME Corporation\"@g" java-library-template/build.gradle.kts
-          sed -i "s@developerOrganizationUrl = \"https://thriving.dev\"@developerOrganizationUrl = \"https://yourdomain.com\"@g" java-library-template/build.gradle.kts
-          
-          # gradle module 'java-library-template'
-          ## rename base folder
-          mv $ARTIFACT_NAME_OLD $ARTIFACT_NAME_NEW
-          
-          ## move files for all srcset to new package name path structure 
-          PACKAGE_PATH_OLD=$(echo "$PACKAGE_OLD" | tr "." "/")
-          PACKAGE_PATH_NEW=$(echo "$PACKAGE_NEW" | tr "." "/")
-          for srcset in intTest main test
-          do 
-            mkdir -p "$ARTIFACT_NAME_NEW/src/$srcset/java/$PACKAGE_PATH_NEW"
-            mv "$ARTIFACT_NAME_NEW/src/$srcset/java/$PACKAGE_PATH_OLD" "$ARTIFACT_NAME_NEW/src/$srcset/java/$PACKAGE_PATH_NEW"
-          done
-          
-          ## replace package name in java files
-          #find $ARTIFACT_NAME_NEW -type f -name "*.java" -print0 | xargs -0 sed -i '' -e "s@$PACKAGE_OLD@$PACKAGE_NEW@g"
-          #find $ARTIFACT_NAME_NEW -type f -name "*.java" -print0 | xargs -0 sed -i '' -e "s@$PACKAGE_OLD@$PACKAGE_NEW@g"
-          find $ARTIFACT_NAME_NEW -type f -name "*.java"  -exec sed -i'' -e "s@$PACKAGE_OLD@$PACKAGE_NEW@g" {} +
-          
-          # README from template
-          mv -f .github/template/README.md README.md
-          rm -Rf .github/template/
-          sed -i "s@%ARTIFACT_GROUP%@$ARTIFACT_GROUP_NEW@g" README.md
-          sed -i "s@%ARTIFACT_NAME%@$ARTIFACT_NAME_NEW@g" README.md
-          sed -i "s@%REPO_OWNER%@$GITHUB_REPOSITORY_OWNER@g" README.md
-          sed -i "s@%REPO_NAME%@$GITHUB_REPOSITORY_NAME@g" README.md
-          
-          # CHANGELOG
-          sed -i "s@$GITHUB_REPOSITORY_OLD@$GITHUB_REPOSITORY@g" CHANGELOG.md
-          
-          # CONTRIBUTING
-          sed -i "s@$GITHUB_REPOSITORY_OLD@$GITHUB_REPOSITORY@g" CONTRIBUTING.md
-          sed -i "s@$ARTIFACT_NAME_OLD@$GITHUB_REPOSITORY_NAME@g" CONTRIBUTING.md
-          
-          # CODE_OF_CONDUCT
-          sed -i "s/info@thriving.dev/$INPUT_EMAIL/g" CODE_OF_CONDUCT.md
+          echo "version=0.0.2-SNAPSHOT" > gradle.properties
 
       - name: Commit files
         run: |
@@ -164,8 +114,6 @@ jobs:
 
       - name: Checkout project sources
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.CI_GITHUB_TOKEN }}
 
       - name: Migrate
         env:
